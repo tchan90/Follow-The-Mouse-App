@@ -1,38 +1,167 @@
+:root{
+  --primary-color: rgb(115, 195, 248);
+}
+
+a:hover{
+  text-decoration: none;
+}
+a{
+  text-decoration:none;
+}
+i {
+  margin-right:10px;
+  margin-left:10px;
+}
 .App {
-  text-align: center;
+  flex:1 0 auto;
+  background-color:rgb(226, 226, 226);
+  overflow-x:auto;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.navflex{
+  display:flex;
+  justify-content: space-between;
+  padding-left:10px;
+  padding-right:10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.navTitle {
+  text-decoration:none;
+  color:white;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  line-height:3.4rem;
+  font-size:20px;
 }
 
-.App-link {
-  color: #61dafb;
+.authbtns{
+  line-height:2.7rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.landing-btn{
+  background-color:white;
+  padding: 100px 100px;
+  font-size:50px;
+  font-weight:500;
+  letter-spacing: 2px;
+  display:inline-block;
+  cursor:pointer;
+  color:grey;
+  border:none;
+}
+.listStyles h2{
+  color:black;
+}
+.listStyles p{
+  font-size:18px;
+  font-weight:600;
+  color:grey;
+}
+.img-fit{
+  width:100%;
+  height:auto;
+}
+.largeCard>h2{
+  font-size:30px
+}
+.largeCard-p p{
+  font-size:22px;
+}
+.formBox{
+  display:inline-block;
+  margin-right:auto;
+  margin-left:auto;
+  margin-bottom:40px;
+}
+.formFields{
+  margin-bottom:20px;
+}
+.formContainer{
+  display:flex;
+  justify-content: center;
+  margin-top:20px;
+  flex-wrap: nowrap;
+  width:100%;
+  height:auto;
+}
+
+.formStyle{
+  text-align:center;
+  background-color:white;
+  padding:20px 20px;
+  width:50%;
+  margin-right:auto;
+  margin-left:auto;
+  box-shadow: 2px 4px 10px rgb(207, 207, 207);
+}
+
+.flex-vert{
+  display:flex;
+  flex-direction:column;
+}
+
+.breadcrumb-margins{
+  padding: 10px 10px;
+}
+
+.jumbo-img{
+  background:url('https://images.unsplash.com/photo-1561090164-41875ecdae5a?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjF9')  no-repeat bottom center/cover;
+  height:300px;
+  position:relative;
+  background-position: 0 -50px;
+  width:100%;
+}
+
+.overlay{
+  position:absolute;
+  background-color:rgba(0,0,0,0.5);
+  width:100%;
+  height:100%;
+  padding:0;
+  right:0;
+  left:0;
+}
+
+.ride-name{
+  color:white;
+  bottom:0;
+  position:absolute;
+  left:20px;
+}
+
+.viewCard{
+  background-color:white;
+  height:auto;
+  width:800px;
+  margin-top:20px;
+  box-shadow: 2px 4px 10px rgb(204, 204, 204);
+  padding-bottom:20px;
+  margin-right:auto;
+  margin-left:auto;
+}
+
+.adminTable{
+  width:auto;
+  overflow-x: auto;
+}
+
+.uploadedImg{
+  width:50%;
+  height:auto;
+  margin-top:10px;
+}
+.photoalb-btns{
+  text-align:center;
+  margin-top:20px;
+  flex-direction: column;
+  display:flex;
+}
+.galleryImg{
+  width:100%;
+  height:auto;
+}
+.footer{
+  color:black;
+  flex-shrink:0;
+  text-align:center;
+  background-color:grey;
 }
