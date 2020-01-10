@@ -94,6 +94,20 @@ i {
   box-shadow: 2px 4px 10px rgb(207, 207, 207);
 }
 
+.signInForm{
+  text-align:center;
+  background-color:white;
+  width:500px;
+  height:auto;
+  padding:20px 20px;
+  margin:0;
+
+}
+
+.signInModal{
+  transform:translate(25%,20%);
+}
+
 .flex-vert{
   display:flex;
   flex-direction:column;

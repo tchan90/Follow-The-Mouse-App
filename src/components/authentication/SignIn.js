@@ -2,19 +2,12 @@ import React, { Component } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {Link} from 'react-router-dom';
-import UserService from '../../services/UserService'
-import classnames from 'classnames';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {login} from '../../actions/authActions';
+import { Alert } from '@material-ui/lab';
 
-const validEmailRegex =   RegExp(/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
-
-const validateForm = (errors) => {
-    let valid = true;
-    Object.values(errors).forEach(
-        (val) => val.length > 0 && (valid = false)
-    )
-    return valid;
-}
 
 class SignIn extends Component {
     constructor(){
@@ -22,79 +15,76 @@ class SignIn extends Component {
         this.state={
             email:'',
             password:'',
-            errorMsg:false,
-            errors:{
-                email:'',
-                password:''
-            },
+            msg:null,
         }
         this.onChange=this.onChange.bind(this);
         this.onSubmit=this.onSubmit.bind(this);
     }
+
+    static propTypes = {
+        isAuthenticated: PropTypes.bool,
+        error: PropTypes.object.isRequired,
+        login: PropTypes.func.isRequired,
+    }
+
+    componentDidUpdate(prevProps){
+        const {error,isAuthenticated} = this.props;
+        if (error !== prevProps.error){
+            //check for login error
+            if (error.id === 'LOGIN_FAIL'){
+                this.setState({msg: error.msg.msg});
+            }else{
+                this.setState({msg:null})
+            }
+        }
+        if (isAuthenticated) {
+            this.props.callFromAdmin();
+          }
+    }
+
     onChange = (event) => {
         event.preventDefault();
   const { name, value } = event.target;
-  let errors = this.state.errors;
-        switch(name){
-            case 'email':
-                errors.email = validEmailRegex.test(value) ? '' : 'Email is not valid';
-                break;
-            case 'password':
-                errors.password = value.length < 6 ? 'Password must be over 6 characters':'';
-                break;
-                default:
-                    break;
+        this.setState({[name]:value})
         }
-        this.setState({errors,[name]:value})
-        }
-        onSubmit(e){
+    onSubmit(e){
           e.preventDefault()
-          if(validateForm(this.state.errors)){
-              console.log('valid')
               const user={
                 email:this.state.email,
                 password:this.state.password,
               };
               console.log(user);
-              UserService.loginUser(user)
-              .then(res=> console.log(res.data))
-              .catch(error => {
-                this.setState({errorMsg:true})
-                console.log(error.data)
-              }
-                );
-          }else{
-              console.error('invalid form')
-          }
-        }
+              //Attempt to login
+              this.props.login(user)
+              console.log('login success')
+         }
       
     render() {
-        const {errors,email,password,errorMsg} = this.state;
+        const {email,password} = this.state;
         return (
             <div>
-                <form className="formStyle" style={{marginTop:"20px"}} onSubmit={this.onSubmit}>
+                <form className="signInForm" onSubmit={this.onSubmit}>
                 <h1>Sign In</h1>
-                <div className='formContainer flex-vert'>
-             <TextField name="email" type="email" label="Email" value={email} onChange={this.onChange} className={classnames ('validate',{'is-invalid':errors.email})}
+                <div className='flex-vert'>
+                    {this.state.msg ?  <Alert severity="error">{this.state.msg}</Alert> : null }
+             <TextField name="email" type="email" label="Email" value={email} onChange={this.onChange} 
                    /> 
-          {errors.email.length > 0 && 
-  <span style={{color:'red'}}>{errors.email}</span>}
-            <TextField name="password" type="password" label="Password" value={password} onChange={this.onChange} className={classnames ('validate',{'is-invalid':errors.password})}
+            <TextField name="password" type="password" label="Password" value={password} onChange={this.onChange}
                    /> 
-            {errors.password.length > 0 && 
-  <span style={{color:'red'}}>{errors.password}</span>}
-  {errorMsg ? <div style={{marginTop:'15px'}}><RemoveCircleIcon color="secondary"/><p style={{color:'red'}}>An error occured signing in</p></div>  : ""}
                    <div style={{paddingTop:"20px"}}> 
 <Button color="primary" type="submit">
         Submit
       </Button>  
-      <Button color="primary" type="submit" component={Link} to="/admin">
-        Cancel
-      </Button></div></div>
+     </div></div>
             </form>
             </div>
         )
     }
 }
 
-export default SignIn
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated,
+    error: state.error
+})
+
+export default connect(mapStateToProps, {login})(SignIn)

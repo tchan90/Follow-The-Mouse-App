@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {Link} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import SignIn from '../authentication/SignIn'
-
 const useStyles = makeStyles(theme => ({
     root: {
       flexGrow: 1,
@@ -21,7 +19,6 @@ const Landing = () => {
 
     return (
              <div className={classes.root}>
-               <SignIn/>
                   <Grid container spacing={4} >
              <Grid item lg={6} xs={12}>
           <Paper className={classes.paper}> <Link to="/ListAll"><button className="landing-btn list-btn">List</button></Link></Paper>
