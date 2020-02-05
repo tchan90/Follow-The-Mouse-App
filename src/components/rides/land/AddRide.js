@@ -13,8 +13,16 @@ import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import MatLink from '@material-ui/core/Link';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import RideService from '../../../services/RideService';
-import BlockIcon from '@material-ui/icons/Block';
+import { Alert } from '@material-ui/lab';
 
+const validateForm = (errors) => {
+    let valid = true;
+    Object.values(errors).forEach(
+      // if we have an error string set valid to false
+      (val) => val.length > 0 && (valid = false)
+    );
+    return valid;
+  }
 
 class AddRideArn extends Component {
     constructor(props){
@@ -28,14 +36,53 @@ class AddRideArn extends Component {
             link:'',
             fastPass:'',
             hiddenMickey:'',
+            errors:{
+            name:'',
+            location:'',
+            information:'',
+            image:'',
+            link:'',
+            fastPass:'',
+            hiddenMickey:'',
+            },
+         
          }
     }
 
 handleChange = (e) => {
-   this.setState({
-       [e.target.name]: e.target.value
-   })
-} 
+    e.preventDefault();
+    const { name, value } = e.target;
+    let errors = this.state.errors; 
+    switch(name){
+        case 'name':
+            errors.name = value.length < 1 ? 'You must fill in this field' : '';
+        break;
+        case 'location': 
+        errors.location = value.length < 1  ? 'You must select an option' : '';
+        break;
+        case 'information':
+            errors.information = value.length < 1  ? 'You must fill in this field':'';
+        break;
+        case 'image':
+            errors.image = value.length < 1   ? 'You must upload an image' : '';
+        break;
+        case 'link': 
+            errors.link = value.length < 1  ? 'You must provide a link' : '';
+        break;
+        case 'fastPass' : 
+            errors.fastPass = value.length < 1 ? 'You must select an option':'';
+        break;
+        case 'hiddenMickey' : 
+            errors.hiddenMickey = value.length < 1 ? 'You must select an option': '';
+        break;
+        default:
+            break;
+    }
+    this.setState({errors, [name]: value}, ()=> {
+        console.log(errors)
+  })
+}
+
 //target file name/details to be uploaded
 handleUploadChange = event => {
    this.setState({
@@ -46,7 +93,9 @@ handleUploadChange = event => {
 handleSubmit = async(e) => {
     e.preventDefault();
     //If form valid
-        //upload image to Firebase
+    if(validateForm(this.state.errors)){
+        console.info('Valid Form')
+         //upload image to Firebase
      const{image} = this.state;
      const uploadTask = storage.ref(`rideImages/${image.name}`).put(image);
          //Event listener
@@ -91,11 +140,15 @@ handleSubmit = async(e) => {
             })
          })
      });
+    }else{
+        console.error('invalid form')
+    }
+       
      
 }
      
     render() {
-        const {name,location,information,image,link,fastPass,hiddenMickey} = this.state
+        const {name,location,information,image,link,fastPass,hiddenMickey, errors} = this.state
         return (
             <div> 
             <Breadcrumbs aria-label="breadcrumb" className="breadcrumb-margins">
@@ -113,20 +166,34 @@ handleSubmit = async(e) => {
                 <div className='formContainer'>
                     <div> 
                     <Name name="name" type="name" value={name} label="Name" onChange={this.handleChange}/>
+                    {errors.name.length > 0 && 
+  <Alert severity='error'>{errors.name}</Alert>}
                     <SelectMenu name="location" type="location" value={location} label="Location" onChange={this.handleChange}/>
+                    {errors.location.length > 0 && 
+  <Alert severity='error'>{errors.location}</Alert>}
                     <SelectMenuTF name="fastPass" type="fastPass" value={fastPass} label="Fast Pass" 
                     onChange={this.handleChange}/>
+                    {errors.fastPass.length > 0 && 
+  <Alert severity='error'>{errors.fastPass}</Alert>}
                     <SelectMenuTF name="hiddenMickey" type="hiddenMickey" value={hiddenMickey} label="Hidden Mickey" 
                     onChange={this.handleChange}/>
+                    {errors.hiddenMickey.length > 0 && 
+  <Alert severity='error'>{errors.hiddenMickey}</Alert>}
                     </div>
             </div>
             <div> <Information name="information" type="information" value={information} label="Information" 
-                    onChange={this.handleChange}/></div>
+                    onChange={this.handleChange}/>
+                     {errors.information.length > 0 && 
+  <Alert severity='error'>{errors.information}</Alert>}</div>
             <div>  <SingleField name="link" type="link" value={link} label="link" 
-                    onChange={this.handleChange}/> </div>
-                  
+                    onChange={this.handleChange}/> 
+                     {errors.link.length > 0 && 
+  <Alert severity='error'>{errors.link}</Alert>}
+                    </div>
                     <div style={{marginTop:'20px'}}> 
                     <Upload onChange={this.handleUploadChange}/>
+                    {errors.image.length > 0 && 
+  <Alert severity='error'>{errors.image}</Alert>}
                     {image ? <div>
                     <CheckCircleOutlineIcon fontSize="small" style={{marginTop:'10px'}}/> Image added!
                     </div> : ''}

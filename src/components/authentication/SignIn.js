@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {Link} from 'react-router-dom';
-import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {login} from '../../actions/authActions';
@@ -38,7 +36,8 @@ class SignIn extends Component {
             }
         }
         if (isAuthenticated) {
-            this.props.callFromAdmin();
+            //check if this is right***
+            props.history.push("/admin");
           }
     }
 
